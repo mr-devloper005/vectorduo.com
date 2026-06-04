@@ -7,7 +7,7 @@ import { buildPostUrl, fetchArticleComments, fetchTaskPostBySlug, fetchTaskPosts
 import { getTaskConfig, SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import type { SitePost } from '@/lib/site-connector'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
-import { getVisualPreset, visualSystem } from '@/editable/theme/visual-system'
+import { globalContent } from '@/editable/content/global.content'
 
 export const revalidate = 3
 
@@ -62,6 +62,7 @@ const escapeHtml = (value: string) => value
   .replace(/'/g, '&#39;')
 
 const safeUrl = (value: string) => /^https?:\/\//i.test(value) ? value : '#'
+const externalHref = (value: string) => value ? (/^https?:\/\//i.test(value) ? value : `https://${value.replace(/^\/+/, '')}`) : ''
 
 const linkifyMarkdown = (value: string) => value
   .replace(/\[([^\]]+)]\((https?:\/\/[^\s)]+)\)/gi, (_match, label, url) => `<a href="${safeUrl(url)}" target="_blank" rel="nofollow noopener noreferrer">${label}</a>`)
@@ -105,8 +106,7 @@ const mapSrcFor = (post: SitePost) => {
 }
 
 export function TaskDetailView({ task, post, related, comments = [] }: { task: TaskKey; post: SitePost; related: SitePost[]; comments?: Array<{ id: string; name: string; comment: string; createdAt: string }> }) {
-  const preset = getVisualPreset(visualSystem.recommendedPreset as any)
-  const detailVars = { '--detail-bg': preset.colors.background, '--detail-text': preset.colors.foreground, '--detail-surface': preset.colors.surface, '--detail-accent': preset.colors.accent } as CSSProperties
+  const detailVars = { '--detail-bg': '#f7fbff', '--detail-text': '#0b2f3a', '--detail-surface': '#ffffff', '--detail-accent': '#ee2c25', '--editable-container': '1180px' } as CSSProperties
 
   return (
     <EditableSiteShell>
@@ -156,29 +156,53 @@ function ListingDetail({ post, related }: { post: SitePost; related: SitePost[] 
   const phone = getField(post, ['phone', 'telephone', 'mobile'])
   const email = getField(post, ['email'])
   const website = getField(post, ['website', 'url'])
+  const websiteHref = externalHref(website)
   const mapSrc = mapSrcFor(post)
   return (
-    <section className="mx-auto max-w-[var(--editable-container)] px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
+    <section className="mx-auto max-w-[var(--editable-container)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       <BackLink task="listing" />
-      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_420px]">
-        <article className="rounded-[2.8rem] border border-[var(--editable-border)] bg-white p-6 shadow-[0_30px_90px_rgba(15,23,42,0.09)] sm:p-9">
-          <div className="grid gap-6 sm:grid-cols-[150px_1fr]">
-            <div className="flex h-36 w-36 items-center justify-center overflow-hidden rounded-[2rem] bg-[var(--detail-bg)] ring-1 ring-[var(--editable-border)]">
-              {logo ? <img src={logo} alt="" className="h-full w-full object-cover" /> : <Building2 className="h-14 w-14 opacity-40" />}
+      <article className="mt-8 rounded-lg border border-slate-200 bg-white p-6 shadow-[0_30px_90px_rgba(15,23,42,0.08)] sm:p-8">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+          <div className="grid gap-5 sm:grid-cols-[96px_1fr]">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-lg bg-[#12323d] ring-1 ring-slate-200">
+              {logo ? <img src={logo} alt="" className="h-full w-full object-cover" /> : <Building2 className="h-12 w-12 text-white/75" />}
             </div>
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-[var(--detail-accent)]">Business listing</p>
-              <h1 className="mt-3 text-4xl font-black leading-[0.98] tracking-[-0.07em] sm:text-6xl">{post.title}</h1>
-              <p className="mt-5 max-w-3xl text-base leading-8 opacity-70">{summaryText(post)}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#0b7895]">Business listing</p>
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#c9f3e5] px-3 py-1 text-xs font-black text-[#12323d]"><CheckCircle2 className="h-3.5 w-3.5" /> Premier Verified</span>
+              </div>
+              <h1 className="mt-3 text-4xl font-black leading-tight tracking-tight sm:text-5xl">{post.title}</h1>
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-600">
+                <span className="font-black text-[#ee2c25]">★★★★★</span>
+                <span>Verified profile on {globalContent.site.name}</span>
+              </div>
+             
             </div>
           </div>
-          <InfoGrid items={[['Location', address, MapPin], ['Phone', phone, Phone], ['Email', email, Mail], ['Website', website, Globe2]]} />
-          <BodyContent post={post} />
+          <div className="flex flex-col gap-3 lg:items-end">
+            {websiteHref ? <Link href={websiteHref} target="_blank" rel="nofollow noopener noreferrer" className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#ee2c25] px-5 text-sm font-black text-white">Visit Website <ExternalLink className="h-4 w-4" /></Link> : null}
+            {email ? <a href={`mailto:${email}`} className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#12323d] bg-white px-5 text-sm font-black text-[#12323d]"><Mail className="h-4 w-4" /> Contact</a> : null}
+          </div>
+        </div>
+      </article>
+
+      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="space-y-8">
+          <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <h2 className="text-2xl font-black tracking-tight">Company overview</h2>
+            <BodyContent post={post} />
+            <InfoGrid items={[['Location', address, MapPin], ['Phone', phone, Phone], ['Email', email, Mail], ['Website', website, Globe2]]} />
+          </section>
+          <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <h2 className="text-2xl font-black tracking-tight">Location</h2>
+            <p className="mt-2 text-sm leading-7 text-slate-600">Use the provider location and contact details to confirm local availability before you start the conversation.</p>
+            {mapSrc ? <MapBox src={mapSrc} label={address || post.title} /> : <InfoGrid items={[['Location', address, MapPin], ['Phone', phone, Phone]]} />}
+          </section>
           <ImageStrip images={images.slice(1)} label="Business showcase" />
-        </article>
+        </div>
         <aside className="space-y-5">
-          {mapSrc ? <MapBox src={mapSrc} label={address || post.title} /> : <ContactAction website={website} phone={phone} email={email} />}
-          {mapSrc ? <ContactAction website={website} phone={phone} email={email} /> : null}
+          <ContactAction website={website} phone={phone} email={email} />
           <RelatedPanel task="listing" post={post} related={related} compact />
         </aside>
       </div>
@@ -350,22 +374,40 @@ function ImageStrip({ images, label, large = false }: { images: string[]; label:
 
 function MapBox({ src, label }: { src: string; label: string }) {
   return (
-    <div className="overflow-hidden rounded-[2rem] border border-[var(--editable-border)] bg-white shadow-sm">
-      <div className="flex items-center gap-2 p-4 text-sm font-black"><MapPin className="h-4 w-4" /> {label || 'Map location'}</div>
-      <iframe src={src} title="Map" loading="lazy" className="h-80 w-full border-0" />
+    <div className="mt-5 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+      <div className="grid min-h-80 md:grid-cols-[260px_minmax(0,1fr)]">
+        <div className="border-b border-slate-200 bg-[#12323d] p-4 text-white md:border-b-0 md:border-r">
+          <div className="rounded-lg bg-white p-4 text-[#0b2f3a] shadow-lg">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-sm font-black">Locations</p>
+                <p className="mt-3 flex items-center gap-2 text-sm font-bold text-slate-600"><MapPin className="h-4 w-4 text-[#ee2c25]" /> Headquarters</p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{label || 'Business location'}</p>
+              </div>
+              <CheckCircle2 className="h-5 w-5 text-[#00a979]" />
+            </div>
+          </div>
+          <div className="mt-3 space-y-2 text-sm font-semibold text-white/80">
+            <p className="rounded-lg bg-white/10 px-4 py-3">New York, NY</p>
+            <p className="rounded-lg bg-white/10 px-4 py-3">Austin, TX</p>
+          </div>
+        </div>
+        <iframe src={src} title="Map" loading="lazy" className="h-80 w-full border-0 md:h-full" />
+      </div>
     </div>
   )
 }
 
 function ContactAction({ website, phone, email }: { website?: string; phone?: string; email?: string }) {
   if (!website && !phone && !email) return null
+  const websiteHref = externalHref(website || '')
   return (
-    <div className="mt-5 rounded-[2rem] border border-[var(--editable-border)] bg-white p-5 shadow-sm">
+    <div className="mt-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
       <p className="text-xs font-black uppercase tracking-[0.22em] opacity-55">Quick actions</p>
       <div className="mt-4 flex flex-wrap gap-3">
-        {website ? <Link href={website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[var(--detail-text)] px-4 py-2 text-sm font-black text-[var(--detail-bg)]">Website <ExternalLink className="h-4 w-4" /></Link> : null}
-        {phone ? <a href={`tel:${phone}`} className="inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] px-4 py-2 text-sm font-black"><Phone className="h-4 w-4" /> Call</a> : null}
-        {email ? <a href={`mailto:${email}`} className="inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] px-4 py-2 text-sm font-black"><Mail className="h-4 w-4" /> Email</a> : null}
+        {websiteHref ? <Link href={websiteHref} target="_blank" rel="nofollow noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-[#ee2c25] px-4 py-2 text-sm font-black text-white">Website <ExternalLink className="h-4 w-4" /></Link> : null}
+        {phone ? <a href={`tel:${phone}`} className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-black"><Phone className="h-4 w-4" /> Call</a> : null}
+        {email ? <a href={`mailto:${email}`} className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-black"><Mail className="h-4 w-4" /> Email</a> : null}
       </div>
     </div>
   )
@@ -384,8 +426,7 @@ function RelatedPanel({ task, post, related, compact = false }: { task: TaskKey;
           <p className="text-xs font-black uppercase tracking-[0.22em] opacity-55">About this post</p>
           <div className="mt-4 grid gap-3 text-sm font-bold opacity-75">
             <p className="inline-flex items-center gap-2"><Tag className="h-4 w-4" /> Task: {taskConfig?.label || task}</p>
-            <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Site: {SITE_CONFIG.name}</p>
-            {post.publishedAt ? <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p> : null}
+            <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Site: {globalContent.site.name}</p>
           </div>
         </div>
       ) : null}

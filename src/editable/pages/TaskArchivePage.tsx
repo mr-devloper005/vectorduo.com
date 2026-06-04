@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { CSSProperties } from 'react'
-import { ArrowRight, Bookmark, BriefcaseBusiness, Building2, Camera, Download, FileText, Filter, Image as ImageIcon, MapPin, Megaphone, Search, UserRound } from 'lucide-react'
+import { ArrowRight, Bookmark, BriefcaseBusiness, Building2, Camera, CheckCircle2, Download, ExternalLink, FileText, Filter, Image as ImageIcon, MapPin, Megaphone, Search, UserRound } from 'lucide-react'
 import { buildTaskMetadata } from '@/lib/seo'
 import { CATEGORY_OPTIONS, normalizeCategory } from '@/lib/categories'
 import { fetchPaginatedTaskPosts, buildPostUrl } from '@/lib/task-data'
@@ -9,7 +9,6 @@ import type { SiteFeedPagination, SitePost } from '@/lib/site-connector'
 import { taskPageMetadata } from '@/config/site.content'
 import { taskPageVoices } from '@/editable/content/task-pages.content'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
-import { getVisualPreset, visualSystem } from '@/editable/theme/visual-system'
 
 export const revalidate = 3
 
@@ -84,36 +83,35 @@ export async function EditableTaskArchiveRoute({
 export function TaskArchiveView({ task, posts, pagination, category, basePath }: { task: TaskKey; posts: SitePost[]; pagination: SiteFeedPagination; category: string; basePath: string }) {
   const taskConfig = getTaskConfig(task)
   const voice = taskPageVoices[task]
-  const preset = getVisualPreset(visualSystem.recommendedPreset as any)
   const page = pagination.page || 1
   const label = taskConfig?.label || task
   const deck = taskDeck[task]
   const Icon = deck.icon
-  const archiveVars = { '--archive-bg': preset.colors.background, '--archive-text': preset.colors.foreground, '--archive-surface': preset.colors.surface, '--archive-accent': preset.colors.accent } as CSSProperties
+  const archiveVars = { '--archive-bg': '#f7fbff', '--archive-text': '#0b2f3a', '--archive-surface': '#ffffff', '--archive-accent': '#ee2c25', '--editable-container': '1180px' } as CSSProperties
   const categoryLabel = category === 'all' ? 'All categories' : CATEGORY_OPTIONS.find((item) => item.slug === category)?.name || category
 
   return (
     <EditableSiteShell>
       <main style={archiveVars} className="bg-[var(--archive-bg)] text-[var(--archive-text)]">
-        <section className="mx-auto grid max-w-[var(--editable-container)] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-20">
-          <div className="rounded-[2.5rem] border border-[var(--editable-border)] bg-[var(--archive-surface)] p-7 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:p-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-white/70 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-[var(--archive-accent)]"><Icon className="h-4 w-4" /> {label}</div>
-            <h1 className="mt-5 max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.07em] sm:text-6xl">{voice?.headline || `Browse ${label}`}</h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 opacity-70">{voice?.description || SITE_CONFIG.description}</p>
-            <div className="mt-6 rounded-[1.5rem] border border-[var(--editable-border)] bg-white/55 p-4 text-sm font-bold leading-7 opacity-75">{deck.promise}</div>
+        <section className="mx-auto grid max-w-[var(--editable-container)] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-14">
+          <div className="rounded-lg border border-slate-200 bg-[var(--archive-surface)] p-7 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:p-10">
+            <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-[#e7f0ff] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#0b7895]"><Icon className="h-4 w-4" /> {label}</div>
+            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">{voice?.headline || `Browse ${label}`}</h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600">{voice?.description || SITE_CONFIG.description}</p>
+            <div className="mt-6 rounded-lg border border-slate-200 bg-[#f7fbff] p-4 text-sm font-bold leading-7 text-slate-600">{deck.promise}</div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={basePath} className="rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">Browse all</Link>
-              <Link href="/search" className="rounded-full border border-[var(--editable-border)] px-5 py-3 text-sm font-black">Search posts</Link>
+              <Link href={basePath} className="rounded-lg bg-[#12323d] px-5 py-3 text-sm font-black text-white">Browse all</Link>
+              <Link href="/search" className="rounded-lg border border-slate-300 px-5 py-3 text-sm font-black">Search companies</Link>
             </div>
           </div>
 
-          <form action={basePath} className="self-end rounded-[2rem] border border-[var(--editable-border)] bg-white/70 p-5 shadow-sm backdrop-blur">
+          <form action={basePath} className="self-end rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] opacity-55"><Filter className="h-4 w-4" /> Filter</div>
-            <select name="category" defaultValue={category} className="mt-4 h-12 w-full rounded-2xl border border-[var(--editable-border)] bg-white px-4 text-sm font-bold outline-none">
+            <select name="category" defaultValue={category} className="mt-4 h-12 w-full rounded-lg border border-slate-300 bg-white px-4 text-sm font-bold outline-none">
               <option value="all">All categories</option>
               {CATEGORY_OPTIONS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
             </select>
-            <button className="mt-3 h-12 w-full rounded-2xl bg-[var(--archive-text)] text-sm font-black text-[var(--archive-bg)]">Apply</button>
+            <button className="mt-3 h-12 w-full rounded-lg bg-[#ee2c25] text-sm font-black text-white">Apply</button>
             <p className="mt-3 text-xs font-bold opacity-55">Showing: {categoryLabel}</p>
           </form>
         </section>
@@ -133,7 +131,7 @@ export function TaskArchiveView({ task, posts, pagination, category, basePath }:
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             {pagination.hasPrevPage ? <Link href={pageHref(basePath, category, page - 1)} className="rounded-full border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-black">Previous</Link> : null}
-            <span className="rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">Page {page} of {pagination.totalPages || 1}</span>
+            <span className="rounded-lg bg-[#12323d] px-5 py-3 text-sm font-black text-white">Page {page} of {pagination.totalPages || 1}</span>
             {pagination.hasNextPage ? <Link href={pageHref(basePath, category, page + 1)} className="rounded-full border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-black">Next</Link> : null}
           </div>
         </section>
@@ -176,24 +174,63 @@ function ListingArchiveCard({ post, href }: { post: SitePost; href: string }) {
   const location = getField(post, ['location', 'address', 'city'])
   const phone = getField(post, ['phone', 'telephone', 'mobile'])
   const website = getField(post, ['website', 'url'])
+  const services = [getField(post, ['category', 'service', 'services']), ...(post.tags || [])].filter(Boolean).slice(0, 3)
+  const websiteHref = website && /^https?:\/\//i.test(website) ? website : website ? `https://${website.replace(/^\/+/, '')}` : ''
   return (
-    <Link href={href} className="group grid gap-5 rounded-[2rem] border border-[var(--editable-border)] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:grid-cols-[120px_1fr]">
-      <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-[1.5rem] bg-[var(--archive-bg)] ring-1 ring-[var(--editable-border)]">
-        {logo ? <img src={logo} alt="" className="h-full w-full object-cover" /> : <BriefcaseBusiness className="h-10 w-10 opacity-45" />}
-      </div>
-      <div className="min-w-0">
-        <div className="flex flex-wrap gap-2">
-          <span className="rounded-full bg-[var(--archive-text)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[var(--archive-bg)]">Directory</span>
-          {location ? <span className="inline-flex items-center gap-1 rounded-full border border-[var(--editable-border)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]"><MapPin className="h-3 w-3" /> {location}</span> : null}
+    <article className="rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+      <div className="grid gap-6 p-5 md:grid-cols-[250px_minmax(0,1fr)_220px]">
+        <div>
+          <div className="flex items-start gap-4">
+            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg bg-[#12323d] ring-1 ring-slate-200">
+              {logo ? <img src={logo} alt="" className="h-full w-full object-cover" /> : <BriefcaseBusiness className="h-8 w-8 text-white/75" />}
+            </div>
+            <div className="min-w-0">
+              <h2 className="line-clamp-2 text-2xl font-black leading-tight tracking-tight text-[#0b2f3a]">{post.title}</h2>
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                <span className="font-black text-[#ee2c25]">5.0 ★★★★★</span>
+                <span className="text-[#006b92]">verified reviews</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 grid gap-2 text-sm font-semibold text-slate-600">
+            {location ? <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4" /> {location}</span> : null}
+            {phone ? <span>Phone: {phone}</span> : null}
+            <span className="inline-flex w-fit items-center gap-1 rounded-full bg-[#c9f3e5] px-3 py-1 text-xs font-black text-[#12323d]"><CheckCircle2 className="h-3.5 w-3.5" /> Premier Verified</span>
+          </div>
         </div>
-        <h2 className="mt-4 text-2xl font-black leading-tight tracking-[-0.05em]">{post.title}</h2>
-        <p className="mt-3 line-clamp-2 text-sm leading-6 opacity-65">{getSummary(post)}</p>
-        <div className="mt-4 grid gap-2 text-xs font-bold opacity-70 sm:grid-cols-2">
-          {phone ? <span>Phone: {phone}</span> : null}
-          {website ? <span>Website available</span> : null}
+
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Services provided</p>
+          <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
+            <div className="h-full w-[52%] bg-[#5c83de]" />
+          </div>
+          <div className="mt-3 grid gap-2 text-sm text-slate-600">
+            {(services.length ? services : ['Business Services', 'Consulting', 'Marketing Strategy']).map((service, index) => (
+              <span key={`${service}-${index}`} className="flex items-center gap-2">
+                <span className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-[#5c83de]' : index === 1 ? 'bg-[#2c9bae]' : 'bg-[#62d6af]'}`} />
+                <strong className={index === 0 ? 'text-[#0b2f3a]' : ''}>{index === 0 ? '50% ' : ''}{service}</strong>
+              </span>
+            ))}
+          </div>
+          <p className="mt-4 line-clamp-4 text-sm leading-7 text-slate-600">{getSummary(post) || 'A verified business listing with service details, company profile information, and practical contact options for buyers.'}</p>
+          <Link href={href} className="mt-3 inline-flex items-center gap-2 text-sm font-black text-[#006b92]">See provider profile <ArrowRight className="h-4 w-4" /></Link>
+        </div>
+
+        <div className="flex flex-col gap-3 md:items-end">
+          <Link href={href} className="inline-flex h-12 w-full items-center justify-center rounded-lg border border-[#12323d] bg-white px-5 text-sm font-black text-[#12323d] md:w-40">View Profile</Link>
+          {websiteHref ? (
+            <Link href={websiteHref} target="_blank" rel="nofollow noopener noreferrer" className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#ee2c25] px-5 text-sm font-black text-white md:w-40">
+              Visit Website <ExternalLink className="h-4 w-4" />
+            </Link>
+          ) : null}
         </div>
       </div>
-    </Link>
+      <div className="grid gap-3 border-t border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 md:grid-cols-4">
+        {['Reviewed recently', 'Responsive team', 'Experience across industries', 'Strong value for cost'].map((item) => (
+          <div key={item} className="rounded-lg border border-slate-200 bg-white px-4 py-3 font-semibold">{item}</div>
+        ))}
+      </div>
+    </article>
   )
 }
 

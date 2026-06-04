@@ -3,34 +3,37 @@ import { slot4BrandConfig } from '@/editable/theme/brand.config'
 export const globalContent = {
   site: {
     name: slot4BrandConfig.siteName,
-    tagline: slot4BrandConfig.tagline || 'Independent reading platform',
+    tagline: slot4BrandConfig.tagline || 'Verified business listing marketplace',
     domain: slot4BrandConfig.domain,
     baseUrl: slot4BrandConfig.baseUrl,
   },
   nav: {
-    tagline: 'Independent reading platform',
+    tagline: 'Business listing marketplace',
     primaryLinks: [
-      { label: 'Articles', href: '/articles' },
-      { label: 'Visuals', href: '/image-sharing' },
-      { label: 'Listings', href: '/listings' },
+      { label: 'Technology', href: '/listings?category=technology' },
+      { label: 'Health', href: '/listings?category=health' },
+      { label: 'Shopping', href: '/listings?category=shopping' },
+      { label: 'Fashion', href: '/listings?category=fashion' },
+      { label: 'Business', href: '/listings?category=business' },
       { label: 'Contact', href: '/contact' },
     ],
     actions: {
-      primary: { label: 'Start exploring', href: '/' },
-      secondary: { label: 'Submit', href: '/contact' },
+      primary: { label: 'Get listed', href: '/create' },
+      secondary: { label: 'Find companies', href: '/listings' },
     },
   },
   footer: {
-    tagline: 'Stories, resources, and discoverable posts',
-    description: 'A connected publishing surface for articles, visuals, listings, profiles, bookmarks, and downloadable resources.',
+    tagline: 'Business discovery, reviews, and verified listings',
+    description: 'A focused marketplace for finding trusted service providers, comparing business listings, and connecting with companies ready for your next project.',
     columns: [
       {
         title: 'Explore',
         links: [
           { label: 'Articles', href: '/articles' },
-          { label: 'Listings', href: '/listings' },
-          { label: 'Images', href: '/image-sharing' },
-          { label: 'PDF Library', href: '/pdf' },
+          { label: 'All Listings', href: '/listings' },
+          { label: 'Search Companies', href: '/search' },
+          { label: 'Create Listing', href: '/create' },
+          { label: 'Contact Support', href: '/contact' },
         ],
       },
       {
@@ -41,7 +44,7 @@ export const globalContent = {
         ],
       },
     ],
-    bottomNote: 'Built for clean discovery and connected publishing.',
+    bottomNote: 'Built for confident vendor discovery and better business decisions.',
   },
   commonLabels: {
     readMore: 'Read more',

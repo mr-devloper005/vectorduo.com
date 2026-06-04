@@ -52,11 +52,11 @@ export const taskPageVoices = {
   },
   listing: {
     eyebrow: 'Business directory',
-    headline: 'Business listings built for discovery and comparison.',
-    description: 'Listing pages should behave like a directory with trust cues, metadata, and a practical search rhythm.',
+    headline: 'Top business service providers for every project.',
+    description: 'Compare verified company listings by service focus, location, budget fit, and client signals so your shortlist starts with stronger context.',
     filterLabel: 'Filter business category',
-    secondaryNote: 'Prioritize comparison, location, and direct action paths.',
-    chips: ['Directory', 'Compare', 'Business discovery'],
+    secondaryNote: 'Prioritize comparison, location, service lines, review cues, and direct action paths.',
+    chips: ['Verified listings', 'Compare providers', 'Business discovery'],
   },
   image: {
     eyebrow: 'Visual gallery',
