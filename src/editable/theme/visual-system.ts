@@ -121,10 +121,10 @@ export const visualSystem = {
           ? 'tech-directory'
           : 'organic-journal',
   radius: {
-    sm: '0.75rem',
-    md: '1.25rem',
-    lg: '2rem',
-    xl: '2.75rem',
+    sm: '0.5rem',
+    md: '0.75rem',
+    lg: '1rem',
+    xl: '1.25rem',
   },
   motion: {
     pageLoad: 'animate-in fade-in slide-in-from-bottom-4 duration-700',
@@ -146,7 +146,7 @@ export const visualSystem = {
     dark: 'border border-white/10 bg-black/30 shadow-[0_24px_70px_rgba(0,0,0,0.25)]',
   },
   layout: {
-    page: 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
+    page: "mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8",
     sectionY: 'py-12 sm:py-16 lg:py-20',
     cardGrid: 'grid gap-5 sm:grid-cols-2 lg:grid-cols-3',
   },
