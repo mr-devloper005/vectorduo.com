@@ -145,7 +145,7 @@ export function EditableStoryRail({ primaryTask, primaryRoute, posts }: HomeSect
               <h3 className="mt-4 text-2xl font-black tracking-tight text-[#092f3b]">{category.title}</h3>
               <div className="mt-5 grid gap-3">
                 {category.links.map((link) => (
-                  <Link key={link} href={`/search?q=${encodeURIComponent(link)}`} className="text-sm font-semibold text-[#006b92] hover:text-[#ee2c25]">{link}</Link>
+                  <span key={link} className="text-sm font-semibold text-slate-700">{link}</span>
                 ))}
               </div>
             </article>

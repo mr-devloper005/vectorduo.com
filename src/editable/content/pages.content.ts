@@ -12,7 +12,7 @@ export const pagesContent = {
     hero: {
       badge: 'Verified business marketplace',
       title: ['Connect with trusted companies', 'for your next project.'],
-      description: 'Search business listings by service, budget, location, and expertise. Compare profiles, reviews, and project fit before you reach out.',
+      description: 'Find the right company for your project. Compare services, pricing, and reviews to make an easy, confident choice.',
       primaryCta: { label: 'Find companies', href: '/listings' },
       secondaryCta: { label: 'Create a listing', href: '/create' },
       searchPlaceholder: 'What business service do you need?',
