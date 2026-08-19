@@ -35,7 +35,11 @@ const getImages = (post: SitePost) => {
 const placeholder = '/placeholder.svg?height=900&width=1200'
 const getImage = (post: SitePost) => getImages(post)[0] || placeholder
 const getCategory = (post: SitePost, fallback: string) => asText(getContent(post).category) || post.tags?.[0] || fallback
-const getSummary = (post: SitePost) => post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || asText(getContent(post).body)
+const stripTags = (value: string) => value
+  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+  .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
+  .replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+const getSummary = (post: SitePost) => stripTags(post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || asText(getContent(post).body))
 const getField = (post: SitePost, keys: string[]) => {
   const content = getContent(post)
   for (const key of keys) {
@@ -94,20 +98,20 @@ export function TaskArchiveView({ task, posts, pagination, category, basePath }:
     <EditableSiteShell>
       <main style={archiveVars} className="bg-[var(--archive-bg)] text-[var(--archive-text)]">
         <section className="mx-auto grid max-w-[var(--editable-container)] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-14">
-          <div className="rounded-lg border border-slate-200 bg-[var(--archive-surface)] p-7 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:p-10">
-            <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-[#e7f0ff] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#0b7895]"><Icon className="h-4 w-4" /> {label}</div>
+          <div className="rounded-lg border border-black/[0.06] bg-[var(--archive-surface)] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.08)] sm:p-10">
+            <div className="inline-flex items-center gap-2 rounded-lg border border-black/[0.06] bg-[#e7f0ff] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#415967]"><Icon className="h-4 w-4" /> {label}</div>
             <h1 className="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">{voice?.headline || `Browse ${label}`}</h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600">{voice?.description || SITE_CONFIG.description}</p>
-            <div className="mt-6 rounded-lg border border-slate-200 bg-[#f7fbff] p-4 text-sm font-bold leading-7 text-slate-600">{deck.promise}</div>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-[#415967]">{voice?.description || SITE_CONFIG.description}</p>
+            <div className="mt-6 rounded-lg border border-black/[0.06] bg-[#f7fbff] p-4 text-sm font-bold leading-7 text-[#415967]">{deck.promise}</div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href={basePath} className="rounded-lg bg-[#12323d] px-5 py-3 text-sm font-black text-white">Browse all</Link>
-              <Link href="/search" className="rounded-lg border border-slate-300 px-5 py-3 text-sm font-black">Search companies</Link>
+              <Link href="/search" className="rounded-lg border border-black/[0.06] px-5 py-3 text-sm font-black">Search companies</Link>
             </div>
           </div>
 
-          <form action={basePath} className="self-end rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <form action={basePath} className="self-end rounded-lg border border-black/[0.06] bg-white p-5 shadow-sm">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] opacity-55"><Filter className="h-4 w-4" /> Filter</div>
-            <select name="category" defaultValue={category} className="mt-4 h-12 w-full rounded-lg border border-slate-300 bg-white px-4 text-sm font-bold outline-none">
+            <select name="category" defaultValue={category} className="mt-4 h-12 w-full rounded-lg border border-black/[0.06] bg-white px-4 text-sm font-bold outline-none">
               <option value="all">All categories</option>
               {CATEGORY_OPTIONS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
             </select>
@@ -156,7 +160,7 @@ function ArticleArchiveCard({ post, href, index }: { post: SitePost; href: strin
   const category = getCategory(post, 'Article')
   return (
     <Link href={href} className="group overflow-hidden rounded-[2rem] border border-[var(--editable-border)] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-      <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#12323d]/5">
         <img src={image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em]">{category}</span>
       </div>
@@ -177,22 +181,22 @@ function ListingArchiveCard({ post, href }: { post: SitePost; href: string }) {
   const services = [getField(post, ['category', 'service', 'services']), ...(post.tags || [])].filter(Boolean).slice(0, 3)
   const websiteHref = website && /^https?:\/\//i.test(website) ? website : website ? `https://${website.replace(/^\/+/, '')}` : ''
   return (
-    <article className="rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <article className="rounded-lg border border-black/[0.06] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
       <div className="grid gap-6 p-5 md:grid-cols-[250px_minmax(0,1fr)_220px]">
         <div>
           <div className="flex items-start gap-4">
-            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg bg-[#12323d] ring-1 ring-slate-200">
+            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg bg-[#12323d] ring-1 ring-black/[0.06]">
               {logo ? <img src={logo} alt="" className="h-full w-full object-cover" /> : <BriefcaseBusiness className="h-8 w-8 text-white/75" />}
             </div>
             <div className="min-w-0">
               <h2 className="line-clamp-2 text-2xl font-black leading-tight tracking-tight text-[#0b2f3a]">{post.title}</h2>
               <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
                 <span className="font-black text-[#ee2c25]">5.0 ★★★★★</span>
-                <span className="text-[#006b92]">verified reviews</span>
+                <span className="text-[#415967]">verified reviews</span>
               </div>
             </div>
           </div>
-          <div className="mt-5 grid gap-2 text-sm font-semibold text-slate-600">
+          <div className="mt-5 grid gap-2 text-sm font-semibold text-[#415967]">
             {location ? <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4" /> {location}</span> : null}
             {phone ? <span>Phone: {phone}</span> : null}
             <span className="inline-flex w-fit items-center gap-1 rounded-full bg-[#c9f3e5] px-3 py-1 text-xs font-black text-[#12323d]"><CheckCircle2 className="h-3.5 w-3.5" /> Premier Verified</span>
@@ -200,20 +204,20 @@ function ListingArchiveCard({ post, href }: { post: SitePost; href: string }) {
         </div>
 
         <div className="min-w-0">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Services provided</p>
-          <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
-            <div className="h-full w-[52%] bg-[#5c83de]" />
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#667985]">Services provided</p>
+          <div className="mt-3 h-3 overflow-hidden rounded-full bg-[#eaf1f5]">
+            <div className="h-full w-[52%] bg-[#ee2c25]" />
           </div>
-          <div className="mt-3 grid gap-2 text-sm text-slate-600">
+          <div className="mt-3 grid gap-2 text-sm text-[#415967]">
             {(services.length ? services : ['Business Services', 'Consulting', 'Marketing Strategy']).map((service, index) => (
               <span key={`${service}-${index}`} className="flex items-center gap-2">
-                <span className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-[#5c83de]' : index === 1 ? 'bg-[#2c9bae]' : 'bg-[#62d6af]'}`} />
+                <span className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-[#ee2c25]' : index === 1 ? 'bg-[#415967]' : 'bg-[#c9f3e5]'}`} />
                 <strong className={index === 0 ? 'text-[#0b2f3a]' : ''}>{index === 0 ? '50% ' : ''}{service}</strong>
               </span>
             ))}
           </div>
-          <p className="mt-4 line-clamp-4 text-sm leading-7 text-slate-600">{getSummary(post) || 'A verified business listing with service details, company profile information, and practical contact options for buyers.'}</p>
-          <Link href={href} className="mt-3 inline-flex items-center gap-2 text-sm font-black text-[#006b92]">See provider profile <ArrowRight className="h-4 w-4" /></Link>
+          <p className="mt-4 line-clamp-4 text-sm leading-7 text-[#415967]">{getSummary(post) || 'A verified business listing with service details, company profile information, and practical contact options for buyers.'}</p>
+          <Link href={href} className="mt-3 inline-flex items-center gap-2 text-sm font-black text-[#415967]">See provider profile <ArrowRight className="h-4 w-4" /></Link>
         </div>
 
         <div className="flex flex-col gap-3 md:items-end">
@@ -225,9 +229,9 @@ function ListingArchiveCard({ post, href }: { post: SitePost; href: string }) {
           ) : null}
         </div>
       </div>
-      <div className="grid gap-3 border-t border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 md:grid-cols-4">
+      <div className="grid gap-3 border-t border-black/[0.06] bg-[#f3f7f9] p-4 text-sm text-[#415967] md:grid-cols-4">
         {['Reviewed recently', 'Responsive team', 'Experience across industries', 'Strong value for cost'].map((item) => (
-          <div key={item} className="rounded-lg border border-slate-200 bg-white px-4 py-3 font-semibold">{item}</div>
+          <div key={item} className="rounded-lg border border-black/[0.06] bg-white px-4 py-3 font-semibold">{item}</div>
         ))}
       </div>
     </article>

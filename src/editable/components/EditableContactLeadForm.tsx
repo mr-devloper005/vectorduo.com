@@ -34,7 +34,7 @@ export function EditableContactLeadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg border border-slate-200 bg-white p-6 text-slate-900 shadow-xl shadow-black/5 md:p-8">
+    <form onSubmit={handleSubmit} className="rounded-lg border border-black/[0.06] bg-white p-6 text-[#0b2f3a] shadow-xl shadow-black/5 md:p-8">
       <div className="grid gap-4 md:grid-cols-2">
         <Field name="name" label="Full name" placeholder="Your name" required />
         <Field name="email" type="email" label="Email address" placeholder="you@example.com" required />
@@ -43,13 +43,13 @@ export function EditableContactLeadForm() {
         <Field name="phone" label="Phone number" placeholder="Optional" />
         <Field name="subject" label="Subject" placeholder="How can we help?" />
       </div>
-      <label className="mt-4 grid gap-2 text-sm font-black text-slate-800">
+      <label className="mt-4 grid gap-2 text-sm font-black text-[#0b2f3a]">
         Message
-        <textarea name="message" required rows={6} placeholder="Tell us what kind of provider, category, or listing help you need..." className="rounded-lg border border-slate-300 bg-white px-4 py-3 text-base font-medium text-slate-950 outline-none transition placeholder:text-slate-500 focus:border-[#12323d]" />
+        <textarea name="message" required rows={6} placeholder="Tell us what kind of provider, category, or listing help you need..." className="rounded-lg border border-black/[0.06] bg-white px-4 py-3 text-base font-medium text-[#0b2f3a] outline-none transition placeholder:text-[#667985] focus:border-[#12323d]" />
       </label>
       <input name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       {message ? (
-        <div className={`mt-5 flex items-start gap-3 rounded-2xl px-4 py-3 text-sm font-bold ${status === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'}`}>
+        <div className={`mt-5 flex items-start gap-3 rounded-2xl px-4 py-3 text-sm font-bold ${status === 'success' ? 'bg-[#c9f3e5] text-[#0b2f3a]' : 'bg-[#ee2c25]/10 text-[#ee2c25]'}`}>
           {status === 'success' ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" /> : null}
           <span>{message}</span>
         </div>
@@ -64,9 +64,9 @@ export function EditableContactLeadForm() {
 
 function Field({ name, label, type = 'text', placeholder, required = false }: { name: string; label: string; type?: string; placeholder?: string; required?: boolean }) {
   return (
-    <label className="grid gap-2 text-sm font-black text-slate-800">
+    <label className="grid gap-2 text-sm font-black text-[#0b2f3a]">
       {label}
-      <input name={name} type={type} required={required} placeholder={placeholder} className="h-12 rounded-lg border border-slate-300 bg-white px-4 text-base font-medium text-slate-950 outline-none transition placeholder:text-slate-500 focus:border-[#12323d]" />
+      <input name={name} type={type} required={required} placeholder={placeholder} className="h-12 rounded-lg border border-black/[0.06] bg-white px-4 text-base font-medium text-[#0b2f3a] outline-none transition placeholder:text-[#667985] focus:border-[#12323d]" />
     </label>
   )
 }

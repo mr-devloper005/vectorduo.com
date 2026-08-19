@@ -20,8 +20,11 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-const stripHtml = (value: string) => value.replace(/<[^>]*>/g, ' ')
-const compactText = (value: unknown) => typeof value === 'string' ? stripHtml(value).replace(/\s+/g, ' ').trim().toLowerCase() : ''
+const stripTags = (value: string) => value
+  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+  .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
+  .replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+const compactText = (value: unknown) => typeof value === 'string' ? stripTags(value).toLowerCase() : ''
 const getContent = (post: SitePost) => post.content && typeof post.content === 'object' ? post.content as Record<string, unknown> : {}
 const getImage = (post: SitePost) => {
   const content = getContent(post)
@@ -30,7 +33,7 @@ const getImage = (post: SitePost) => {
   return media || compactRaw(content.featuredImage) || compactRaw(content.image) || compactRaw(content.thumbnail) || images || ''
 }
 const compactRaw = (value: unknown) => typeof value === 'string' ? value.trim() : ''
-const summaryOf = (post: SitePost) => post.summary || compactRaw(getContent(post).description) || compactRaw(getContent(post).excerpt) || ''
+const summaryOf = (post: SitePost) => stripTags(post.summary || compactRaw(getContent(post).description) || compactRaw(getContent(post).excerpt) || '')
 
 const matches = (post: SitePost, query: string, category: string, task: string) => {
   const content = getContent(post)
@@ -55,18 +58,18 @@ function SearchResultCard({ post, index }: { post: SitePost; index: number }) {
   const strong = index % 5 === 0
 
   return (
-    <Link href={href} className={`group block overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-2xl ${strong ? 'md:col-span-2' : ''}`}>
+    <Link href={href} className={`group block overflow-hidden rounded-lg border border-black/[0.06] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-2xl ${strong ? 'md:col-span-2' : ''}`}>
       {image ? (
-        <div className={`relative overflow-hidden bg-black ${strong ? 'aspect-[16/7]' : 'aspect-[16/10]'}`}>
+        <div className={`relative overflow-hidden bg-[#12323d] ${strong ? 'aspect-[16/7]' : 'aspect-[16/10]'}`}>
           <img src={image} alt="" className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-          <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-black">{taskLabel}</span>
+          <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[#0b2f3a]">{taskLabel}</span>
         </div>
       ) : null}
       <div className="p-5 sm:p-6">
         {!image ? <span className="rounded-lg bg-[#12323d] px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-white">{taskLabel}</span> : null}
         <h2 className="mt-4 line-clamp-3 text-2xl font-black leading-tight tracking-tight text-[#0b2f3a]">{post.title}</h2>
-        {summary ? <p className="mt-4 line-clamp-3 text-sm font-semibold leading-7 text-slate-600">{summary}</p> : null}
+        {summary ? <p className="mt-4 line-clamp-3 text-sm font-semibold leading-7 text-[#415967]">{summary}</p> : null}
         <span className="mt-5 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] opacity-60 group-hover:opacity-100">Open result <ArrowRight className="h-4 w-4" /></span>
       </div>
     </Link>
@@ -89,13 +92,13 @@ export default async function SearchPage({ searchParams }: { searchParams?: Prom
     <EditableSiteShell>
       <main className="min-h-screen bg-[var(--editable-page-bg,#f7fbff)] text-[#0b2f3a]">
         <section className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
-          <div className="grid gap-8 rounded-lg border border-slate-200 bg-white p-6 shadow-[0_30px_90px_rgba(15,23,42,0.08)] md:grid-cols-[0.8fr_1.2fr] lg:p-10">
+          <div className="grid gap-8 rounded-lg border border-black/[0.06] bg-white p-6 shadow-[0_30px_90px_rgba(0,0,0,0.08)] md:grid-cols-[0.8fr_1.2fr] lg:p-10">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.28em] opacity-55">{pagesContent.search.hero.badge}</p>
               <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-5xl">{pagesContent.search.hero.title}</h1>
-              <p className="mt-6 max-w-xl text-base font-semibold leading-8 text-slate-600">{pagesContent.search.hero.description}</p>
+              <p className="mt-6 max-w-xl text-base font-semibold leading-8 text-[#415967]">{pagesContent.search.hero.description}</p>
             </div>
-            <form action="/search" className="self-end rounded-lg border border-slate-200 bg-[#f7fbff] p-4 sm:p-5">
+            <form action="/search" className="self-end rounded-lg border border-black/[0.06] bg-[#f7fbff] p-4 sm:p-5">
               <input type="hidden" name="master" value="1" />
               <label className="flex items-center gap-3 rounded-2xl border border-[var(--editable-border)] bg-white px-4 py-3">
                 <Search className="h-5 w-5 opacity-45" />
@@ -120,7 +123,7 @@ export default async function SearchPage({ searchParams }: { searchParams?: Prom
               <p className="text-xs font-black uppercase tracking-[0.24em] opacity-50">{results.length} results</p>
               <h2 className="mt-2 text-3xl font-black tracking-tight">{query ? `Results for "${query}"` : pagesContent.search.resultsTitle}</h2>
             </div>
-            <Link href="/listings" className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-black">Browse listings <ArrowRight className="h-4 w-4" /></Link>
+            <Link href="/listings" className="inline-flex items-center gap-2 rounded-lg border border-black/[0.06] bg-white px-5 py-3 text-sm font-black">Browse listings <ArrowRight className="h-4 w-4" /></Link>
           </div>
 
           {results.length ? (

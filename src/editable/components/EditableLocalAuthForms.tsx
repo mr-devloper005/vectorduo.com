@@ -31,7 +31,7 @@ const saveSession = (user: Pick<LocalUser, 'name' | 'email'>) => {
   window.dispatchEvent(new Event('slot4-auth-change'))
 }
 
-const inputClass = 'h-12 rounded-lg border border-slate-300 bg-white px-4 text-base font-bold text-slate-950 outline-none transition placeholder:text-slate-500 focus:border-[#12323d] focus:bg-white'
+const inputClass = 'h-12 rounded-lg border border-black/[0.06] bg-white px-4 text-base font-bold text-[#0b2f3a] outline-none transition placeholder:text-[#667985] focus:border-[#12323d] focus:bg-white'
 const buttonClass = 'inline-flex h-12 items-center justify-center rounded-lg bg-[#ee2c25] px-6 text-sm font-black uppercase tracking-[0.18em] text-white shadow-sm transition hover:-translate-y-0.5 disabled:opacity-60'
 
 export function EditableLocalLoginForm() {
@@ -60,7 +60,7 @@ export function EditableLocalLoginForm() {
     <form className="mt-6 grid gap-4" onSubmit={submit}>
       <input className={inputClass} type="email" placeholder="Email address" value={email} onChange={(event) => setEmail(event.target.value)} required />
       <input className={inputClass} type="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} required />
-      {message ? <p className={`rounded-2xl px-4 py-3 text-sm font-bold ${status === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'}`}>{message}</p> : null}
+      {message ? <p className={`rounded-2xl px-4 py-3 text-sm font-bold ${status === 'success' ? 'bg-[#c9f3e5] text-[#0b2f3a]' : 'bg-[#ee2c25]/10 text-[#ee2c25]'}`}>{message}</p> : null}
       <button type="submit" className={buttonClass}>{pagesContent.auth.login.submitLabel}</button>
     </form>
   )
@@ -102,7 +102,7 @@ export function EditableLocalSignupForm() {
       <input className={inputClass} placeholder="Full name" value={name} onChange={(event) => setName(event.target.value)} required />
       <input className={inputClass} type="email" placeholder="Email address" value={email} onChange={(event) => setEmail(event.target.value)} required />
       <input className={inputClass} type="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} required />
-      {message ? <p className={`rounded-2xl px-4 py-3 text-sm font-bold ${status === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'}`}>{message}</p> : null}
+      {message ? <p className={`rounded-2xl px-4 py-3 text-sm font-bold ${status === 'success' ? 'bg-[#c9f3e5] text-[#0b2f3a]' : 'bg-[#ee2c25]/10 text-[#ee2c25]'}`}>{message}</p> : null}
       <button type="submit" className={buttonClass}>{pagesContent.auth.signup.submitLabel}</button>
     </form>
   )

@@ -19,19 +19,19 @@ export default function ContactPage() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">{pagesContent.contact.eyebrow}</p>
             <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">{pagesContent.contact.title}</h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">{pagesContent.contact.description}</p>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#415967]">{pagesContent.contact.description}</p>
             <div className="mt-8 space-y-4">
               {lanes.map((lane) => (
-                <div key={lane.title} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-                  <lane.icon className="h-5 w-5 text-[#0b7895]" />
+                <div key={lane.title} className="rounded-lg border border-black/[0.06] bg-white p-5 shadow-sm">
+                  <lane.icon className="h-5 w-5 text-[#ee2c25]" />
                   <h2 className="mt-3 text-xl font-black tracking-tight">{lane.title}</h2>
-                  <p className="mt-2 text-sm leading-7 text-slate-600">{lane.body}</p>
+                  <p className="mt-2 text-sm leading-7 text-[#415967]">{lane.body}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-[#f7fbff] p-5">
+          <div className="rounded-lg border border-black/[0.06] bg-[#f7fbff] p-5">
             <h2 className="text-2xl font-black tracking-tight">{pagesContent.contact.formTitle}</h2>
             <EditableContactLeadForm />
           </div>
