@@ -14,7 +14,7 @@ export function EditableArticleArchive({ posts, pagination, category = 'all', ba
   return (
     <main className={dc.shell.page}>
       <section className={`${dc.shell.section} pt-12 sm:pt-16 lg:pt-20`}>
-        <div className={`rounded-[2.5rem] border ${pal.border} ${pal.darkBg} p-7 text-white shadow-[0_24px_80px_rgba(24,20,17,0.18)] sm:p-10 lg:p-14`}>
+        <div className={`rounded-[2.5rem] border ${pal.border} ${pal.darkBg} p-7 text-white shadow-[0_24px_80px_rgba(0,0,0,0.14)] sm:p-10 lg:p-14`}>
           <p className={`${dc.type.eyebrow} ${pal.accentSoftText}`}>{voice.eyebrow}</p>
           <h1 className={`${dc.type.heroTitle} mt-5 max-w-5xl`}>{voice.headline}</h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-white/72 sm:text-lg">{voice.description}</p>
@@ -54,7 +54,7 @@ export function EditableArticleDetailShell({ slug, post }: { slug: string; post:
   return (
     <main className={dc.shell.page}>
       <section className={`${dc.shell.section} pt-10 sm:pt-14 lg:pt-16`}>
-        <div className={`grid gap-6 rounded-[2.5rem] border ${pal.border} bg-white p-6 shadow-[0_24px_80px_rgba(24,20,17,0.08)] lg:grid-cols-[minmax(0,1fr)_320px] lg:p-10`}>
+        <div className={`grid gap-6 rounded-[2.5rem] border ${pal.border} bg-white p-6 shadow-[0_24px_80px_rgba(0,0,0,0.08)] lg:grid-cols-[minmax(0,1fr)_320px] lg:p-10`}>
           <div className="min-w-0">
             <Link href="/article" className={`inline-flex items-center gap-2 rounded-full border ${pal.border} px-4 py-2 text-sm font-black ${pal.panelText}`}><ChevronLeft className="h-4 w-4" /> Articles</Link>
             <p className={`${dc.type.eyebrow} mt-8 ${pal.accentText}`}>{voice.eyebrow}</p>
@@ -68,7 +68,7 @@ export function EditableArticleDetailShell({ slug, post }: { slug: string; post:
         </div>
       </section>
       <section className="mx-auto w-full max-w-5xl px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-24">
-        <div className={`rounded-[2.25rem] border ${pal.border} bg-white p-6 shadow-[0_24px_80px_rgba(24,20,17,0.08)] sm:p-8 lg:p-10`}>
+        <div className={`rounded-[2.25rem] border ${pal.border} bg-white p-6 shadow-[0_24px_80px_rgba(0,0,0,0.08)] sm:p-8 lg:p-10`}>
           <p className={`text-sm leading-8 ${pal.softMutedText}`}>{post?.summary || `Article detail content for ${slug} will render through the editable detail page.`}</p>
         </div>
       </section>
